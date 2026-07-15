@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Search Jobs</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f2f6ff;
+    text-align:center;
+}
+
+
+.container{
+    width:800px;
+    margin:50px auto;
+}
+
+
+input{
+    width:60%;
+    padding:12px;
+    font-size:16px;
+}
+
+
+button{
+
+    padding:12px 20px;
+    background:#007bff;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+
+}
+
+
+.card{
+
+    background:white;
+    margin:20px;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0px 0px 10px gray;
+    text-align:left;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>Search Jobs</h1>
+
+
+<input type="text" id="searchTitle" placeholder="Enter Job Title">
+
+
+<button onclick="searchJobs()">
+Search
+</button>
+
+
+<div id="jobList"></div>
+
+
+</div>
+
+
+
+<script>
+
+
+function searchJobs(){
+
+
+let title = document.getElementById("searchTitle").value;
+
+
+fetch("http://localhost:8080/jobs/search?title=" + title)
+
+
+.then(response => response.json())
+
+
+.then(data => {
+
+
+let output="";
+
+
+data.forEach(job => {
+
+
+output += `
+
+<div class="card">
+
+<h2>${job.title}</h2>
+
+<p><b>Company:</b> ${job.company}</p>
+
+<p><b>Location:</b> ${job.location}</p>
+
+<p><b>Skills:</b> ${job.skills}</p>
+
+
+<button onclick="applyJob(${job.id})">
+Apply
+</button>
+
+
+</div>
+
+`;
+
+});
+
+
+document.getElementById("jobList").innerHTML = output;
+
+
+});
+
+
+}
+
+function applyJob(jobId) {
+
+    let applicantName = prompt("Enter your Name");
+
+    if (!applicantName) {
+        return;
+    }
+
+    fetch("http://localhost:8080/jobs/" + jobId)
+    .then(response => response.json())
+    .then(job => {
+
+        let application = {
+
+            applicantName: applicantName,
+            company: job.company,
+            jobTitle: job.title,
+            status: "Pending"
+
+        };
+
+        fetch("http://localhost:8080/applications/apply", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(application)
+
+        })
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            alert("Application Submitted Successfully!");
+
+        });
+
+    });
+
+}
+
+
+
+
+</script>
+
+
+</body>
+
+</html>

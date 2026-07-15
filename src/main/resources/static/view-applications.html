@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>View Applications</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f6ff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 90%;
+            margin: 30px auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0px 0px 10px #ccc;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .pending {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .approved {
+            color: green;
+            font-weight: bold;
+        }
+
+        .rejected {
+            color: red;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            display: block;
+            width: 180px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>All Job Applications</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Applicant Name</th>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody id="applicationTable">
+
+        </tbody>
+    </table>
+
+    <a href="admin-dashboard.html" class="back-btn">Back to Dashboard</a>
+
+    <script>
+
+        fetch("http://localhost:8080/applications/all")
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                let table = document.getElementById("applicationTable");
+
+                data.forEach(application => {
+
+                    table.innerHTML += `
+                    
+                    <tr>
+
+                        <td>${application.id}</td>
+
+                        <td>${application.applicantName}</td>
+
+                        <td>${application.company}</td>
+
+                        <td>${application.jobTitle}</td>
+
+                        <td class="${application.status.toLowerCase()}">
+                            ${application.status}
+                        </td>
+
+                    </tr>
+                    
+                    `;
+
+                });
+
+            })
+
+            .catch(error => {
+
+                console.log(error);
+                alert("Failed to load applications.");
+
+            });
+
+    </script>
+
+</body>
+
+</html>

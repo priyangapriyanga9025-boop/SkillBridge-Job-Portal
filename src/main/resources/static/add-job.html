@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>SkillBridge - Add Job</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f7fc;
+}
+
+header{
+background:#0d6efd;
+color:white;
+padding:20px;
+text-align:center;
+box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+.container{
+
+width:500px;
+
+margin:40px auto;
+
+background:white;
+
+padding:30px;
+
+border-radius:10px;
+
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+
+}
+
+h2{
+
+text-align:center;
+
+margin-bottom:25px;
+
+color:#0d6efd;
+
+}
+
+label{
+
+display:block;
+
+margin-top:15px;
+
+font-weight:bold;
+
+color:#333;
+
+}
+
+input{
+
+width:100%;
+
+padding:12px;
+
+margin-top:8px;
+
+border:1px solid #ccc;
+
+border-radius:6px;
+
+font-size:15px;
+
+}
+
+input:focus{
+
+outline:none;
+
+border:2px solid #0d6efd;
+
+}
+
+.buttons{
+
+display:flex;
+
+justify-content:space-between;
+
+margin-top:30px;
+
+}
+
+button{
+
+padding:12px 20px;
+
+border:none;
+
+border-radius:6px;
+
+cursor:pointer;
+
+font-size:15px;
+
+color:white;
+
+}
+
+.save{
+
+background:#198754;
+
+}
+
+.save:hover{
+
+background:#157347;
+
+}
+
+.reset{
+
+background:#ffc107;
+
+color:black;
+
+}
+
+.reset:hover{
+
+background:#e0a800;
+
+}
+
+.back{
+
+background:#0d6efd;
+
+}
+
+.back:hover{
+
+background:#084298;
+
+}
+
+#message{
+
+margin-top:20px;
+
+text-align:center;
+
+font-weight:bold;
+
+}
+
+</style>
+
+</head>
+<body>
+
+<header>
+
+<h1>SkillBridge - Add Job</h1>
+
+</header>
+
+<div class="container">
+
+<h2>Add New Job</h2>
+
+<label>Job Title</label>
+<input
+type="text"
+id="title"
+placeholder="Enter Job Title">
+
+<label>Company Name</label>
+<input
+type="text"
+id="company"
+placeholder="Enter Company Name">
+
+<label>Location</label>
+<input
+type="text"
+id="location"
+placeholder="Enter Job Location">
+
+<label>Required Skills</label>
+<input
+type="text"
+id="skills"
+placeholder="Example: Java, Spring Boot, MySQL">
+
+<div class="buttons">
+
+<button
+class="save"
+onclick="addJob()">
+Save Job
+</button>
+
+<button
+class="reset"
+onclick="resetForm()">
+Reset
+</button>
+
+<button
+class="back"
+onclick="window.location.href='dashboard.html'">
+Back
+</button>
+
+</div>
+
+<p id="message"></p>
+
+</div>
+<script src="api.js"></script>
+<script>
+
+function addJob(){
+
+let title=document.getElementById("title").value.trim();
+let company=document.getElementById("company").value.trim();
+let location=document.getElementById("location").value.trim();
+let skills=document.getElementById("skills").value.trim();
+
+if(title==="" || company==="" || location==="" || skills===""){
+
+document.getElementById("message").style.color="red";
+document.getElementById("message").innerHTML="Please fill all fields.";
+return;
+
+}
+
+let job={
+
+title:title,
+company:company,
+location:location,
+skills:skills
+
+};
+
+fetch(API_URL + "/jobs",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(job)
+
+})
+
+.then(response=>{
+
+if(!response.ok){
+throw new Error("Failed");
+}
+
+return response.json();
+
+})
+
+.then(data=>{
+
+document.getElementById("message").style.color="green";
+document.getElementById("message").innerHTML="Job Added Successfully!";
+
+resetForm();
+
+})
+
+.catch(error=>{
+
+console.log(error);
+
+document.getElementById("message").style.color="red";
+document.getElementById("message").innerHTML="Unable to add job.";
+
+});
+
+}
+
+function resetForm(){
+
+document.getElementById("title").value="";
+document.getElementById("company").value="";
+document.getElementById("location").value="";
+document.getElementById("skills").value="";
+document.getElementById("message").innerHTML="";
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Saved Jobs</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f2f6ff;
+    margin:0;
+}
+
+.container{
+    width:90%;
+    max-width:1000px;
+    margin:40px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px lightgray;
+}
+
+h2{
+    text-align:center;
+    color:#007bff;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:center;
+}
+
+th{
+    background:#007bff;
+    color:white;
+}
+
+tr:nth-child(even){
+    background:#f8f8f8;
+}
+
+button{
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    color:white;
+    cursor:pointer;
+}
+
+.delete{
+    background:#dc3545;
+}
+
+.back{
+    background:#007bff;
+    margin-bottom:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<button class="back"
+onclick="window.location.href='student-dashboard.html'">
+⬅ Back
+</button>
+
+<h2>Saved Jobs</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>S.No</th>
+<th>Email</th>
+<th>Company</th>
+<th>Job Title</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="savedTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+loadSavedJobs();
+
+function loadSavedJobs(){
+
+fetch("http://localhost:8080/savedjobs/all")
+
+.then(response=>response.json())
+
+.then(data=>{
+
+let rows="";
+
+let count=1;
+
+data.forEach(job=>{
+
+rows+=`
+
+<tr>
+
+<td>${count++}</td>
+
+<td>${job.userEmail}</td>
+
+<td>${job.company}</td>
+
+<td>${job.title}</td>
+
+<td>
+
+<button class="delete"
+onclick="deleteJob(${job.id})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("savedTable").innerHTML=rows;
+
+})
+
+.catch(error=>{
+
+console.log(error);
+
+alert("Unable to load saved jobs");
+
+});
+
+}
+
+function deleteJob(id){
+
+if(confirm("Delete this saved job?")){
+
+fetch("http://localhost:8080/savedjobs/delete/"+id,{
+
+method:"DELETE"
+
+})
+
+.then(()=>{
+
+alert("Deleted Successfully");
+
+loadSavedJobs();
+
+});
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

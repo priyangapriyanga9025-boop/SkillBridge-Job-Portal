@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resume List - SkillBridge</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f2f6ff;
+}
+
+.container{
+    width:900px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0px 0px 10px gray;
+}
+
+h2{
+    text-align:center;
+    color:#0d6efd;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:20px;
+    border:1px solid gray;
+    border-radius:5px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#0d6efd;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:10px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+button{
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.download{
+    background:green;
+    color:white;
+}
+
+.delete{
+    background:red;
+    color:white;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+<h2>Uploaded Resumes</h2>
+
+
+<input type="text" id="search" 
+placeholder="Search by name or email"
+onkeyup="searchResume()">
+
+
+
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>File</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+
+<tbody id="resumeTable">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+<script src="api.js"></script>
+<script>
+
+
+let resumes=[];
+
+
+fetch(API_URL + "/resume/list")
+
+.then(response=>response.json())
+
+.then(data=>{
+
+resumes=data;
+
+displayResume(resumes);
+
+});
+
+
+
+function displayResume(data){
+
+
+let table=document.getElementById("resumeTable");
+
+table.innerHTML="";
+
+
+data.forEach(resume=>{
+
+
+table.innerHTML += `
+
+<tr>
+
+<td>${resume.id}</td>
+
+<td>${resume.name}</td>
+
+<td>${resume.email}</td>
+
+
+<td>${resume.fileName}</td>
+
+
+<td>
+
+<button class="download"
+onclick="downloadResume('${resume.fileName}')">
+Download
+</button>
+
+
+<button class="delete"
+onclick="deleteResume('${resume.fileName}')">
+Delete
+</button>
+
+
+</td>
+
+
+</tr>
+
+
+`;
+
+});
+
+
+}
+
+
+
+function searchResume(){
+
+
+let value=document.getElementById("search").value.toLowerCase();
+
+
+let filtered=resumes.filter(r=>
+
+r.name.toLowerCase().includes(value)
+||
+r.email.toLowerCase().includes(value)
+
+);
+
+
+displayResume(filtered);
+
+
+}
+
+
+
+function downloadResume(file){
+
+window.open(
+API_URL + "/uploads/" + file,
+"_blank"
+);
+
+
+}
+
+
+
+function deleteResume(file){
+
+
+if(confirm("Delete this resume?")){
+
+fetch(API_URL + "/resume/delete/" + file,
+{
+method:"DELETE"
+})
+
+.then(()=>{
+
+alert("Resume deleted");
+
+location.reload();
+
+});
+
+
+}
+
+
+}
+
+
+</script>
+
+
+</body>
+</html>

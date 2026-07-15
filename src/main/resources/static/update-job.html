@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Update Job</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f2f6ff;
+}
+
+.container{
+    width:450px;
+    margin:50px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px gray;
+}
+
+h2{
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:#007bff;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Update Job</h2>
+
+<input type="text" id="title" placeholder="Job Title">
+
+<input type="text" id="company" placeholder="Company">
+
+<input type="text" id="location" placeholder="Location">
+
+<input type="text" id="skills" placeholder="Skills">
+
+<button onclick="updateJob()">Update Job</button>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+fetch("http://localhost:8080/jobs/"+id)
+.then(res=>res.json())
+.then(job=>{
+
+document.getElementById("title").value=job.title;
+document.getElementById("company").value=job.company;
+document.getElementById("location").value=job.location;
+document.getElementById("skills").value=job.skills;
+
+});
+
+function updateJob(){
+
+let job={
+
+title:document.getElementById("title").value,
+company:document.getElementById("company").value,
+location:document.getElementById("location").value,
+skills:document.getElementById("skills").value
+
+};
+
+fetch("http://localhost:8080/jobs/"+id,{
+
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(job)
+
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+alert("Job Updated Successfully");
+
+window.location.href="view-jobs.html";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>

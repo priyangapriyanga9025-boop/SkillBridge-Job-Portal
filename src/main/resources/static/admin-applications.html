@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin - Student Applications</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f4f7fc;
+    margin:0;
+}
+
+header{
+    background:#0d6efd;
+    color:white;
+    text-align:center;
+    padding:15px;
+}
+
+.container{
+    width:90%;
+    margin:30px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px lightgray;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:center;
+}
+
+th{
+    background:#0d6efd;
+    color:white;
+}
+
+button{
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    color:white;
+}
+
+.delete{
+    background:#dc3545;
+}
+
+.back{
+    background:#198754;
+    margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>Student Applications</h2>
+</header>
+
+<div class="container">
+
+<table>
+
+<thead>
+
+<tr>
+<th>S.No</th>
+<th>Student Email</th>
+<th>Job Title</th>
+<th>Company</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="tableBody">
+
+</tbody>
+
+</table>
+
+<br>
+
+<center>
+
+<button class="back"
+onclick="window.location.href='admin-dashboard.html'">
+
+Back to Dashboard
+
+</button>
+
+</center>
+
+</div>
+
+<script>
+
+loadApplications();
+
+function loadApplications(){
+
+fetch("http://localhost:8080/appliedjobs/all")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let rows="";
+let count=1;
+
+data.forEach(job => {
+
+rows += `
+
+<tr>
+
+<td>${count++}</td>
+
+<td>${job.studentEmail || job.applicantName}</td>
+
+<td>${job.title || job.jobTitle}</td>
+
+<td>${job.company}</td>
+
+<td>
+
+<select onchange="changeStatus(${job.id},this.value)">
+
+<option value="Applied" ${job.status=="Applied"?"selected":""}>Applied</option>
+
+<option value="Shortlisted" ${job.status=="Shortlisted"?"selected":""}>Shortlisted</option>
+
+<option value="Rejected" ${job.status=="Rejected"?"selected":""}>Rejected</option>
+
+</select>
+
+</td>
+
+<td>
+
+<button class="delete"
+onclick="deleteApplication(${job.id})">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("tableBody").innerHTML=rows;
+
+});
+
+}
+
+function deleteApplication(id){
+
+fetch("http://localhost:8080/appliedjobs/delete/"+id,{
+
+method:"DELETE"
+
+})
+
+.then(()=>{
+
+alert("Application Deleted Successfully");
+
+loadApplications();
+
+});
+
+}
+function changeStatus(id,status){
+
+fetch("http://localhost:8080/appliedjobs/status/"+id,{
+
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+status:status
+})
+
+})
+
+.then(()=>{
+
+alert("Status Updated Successfully");
+
+loadApplications();
+
+});
+
+}
+
+</script>
+
+</body>
+</html>

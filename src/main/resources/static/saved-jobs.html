@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Saved Jobs</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f6ff;
+}
+
+.container{
+width:90%;
+margin:40px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px lightgray;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:12px;
+text-align:center;
+}
+
+th{
+background:#007bff;
+color:white;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+color:white;
+}
+
+.deleteBtn{
+background:red;
+}
+
+.backBtn{
+background:#007bff;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Saved Jobs</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>S.No</th>
+<th>Email</th>
+<th>Company</th>
+<th>Title</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="tableData"></tbody>
+
+</table>
+
+<br>
+
+<button class="backBtn"
+onclick="window.location.href='student-dashboard.html'">
+Back to Dashboard
+</button>
+
+</div>
+<script src="api.js"></script>
+<script>
+
+loadSavedJobs();
+
+function loadSavedJobs(){
+
+fetch(API_URL + "/savedjobs/all")
+.then(res=>res.json())
+.then(data=>{
+
+let email = localStorage.getItem("studentEmail");
+
+let rows="";
+let count=1;
+
+data.forEach(job=>{
+
+if(job.userEmail===email){
+
+rows+=`
+<tr>
+<td>${count++}</td>
+<td>${job.userEmail}</td>
+<td>${job.company}</td>
+<td>${job.title}</td>
+<td>
+<button class="deleteBtn"
+onclick="deleteJob(${job.id})">
+Delete
+</button>
+</td>
+</tr>
+`;
+
+}
+
+});
+
+document.getElementById("tableData").innerHTML=rows;
+
+});
+
+}
+
+function deleteJob(id){
+
+fetch(API_URL + "/savedjobs/delete/"+id,{
+method:"DELETE"
+})
+.then(()=>{
+alert("Saved Job Deleted Successfully");
+loadSavedJobs();
+});
+
+}
+
+</script>
+
+</body>
+</html>

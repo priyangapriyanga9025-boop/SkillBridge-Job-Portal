@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f2f6ff;
+            text-align:center;
+        }
+
+        .container{
+            width:450px;
+            margin:40px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgb(128, 128, 128);
+        }
+
+        input{
+            width:90%;
+            padding:10px;
+            margin:10px;
+        }
+
+        button{
+            padding:10px 20px;
+            background:#007bff;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0056b3;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>My Profile</h2>
+
+<input type="text" id="name" placeholder="Name"><br>
+
+<input type="email" id="email" placeholder="Email"><br>
+
+<input type="text" id="phone" placeholder="Phone"><br>
+
+<button onclick="updateProfile()">Update Profile</button>
+
+<br><br>
+
+<button onclick="location.href='dashboard.html'">
+Back
+</button>
+
+</div>
+
+<script>
+
+function updateProfile(){
+
+alert("Profile Updated Successfully!");
+
+}
+
+</script>
+
+</body>
+</html>
