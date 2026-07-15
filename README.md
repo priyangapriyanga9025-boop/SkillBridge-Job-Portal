@@ -49,7 +49,7 @@ Frontend:
 
 ## Developed By
 
-Priyanga Mary  
+Priyanga Mary savarinathan
 Artificial Intelligence & Data Science
 
 ## Project Year
