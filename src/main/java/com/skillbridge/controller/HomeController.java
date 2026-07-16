@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
-      @GetMapping("/")
-    public String home() {
-        return "SkillBridge Application Running Successfully!";
+        @GetMapping("/")
+    public String home(){
+        return "redirect:/login.html";
     }
 }
