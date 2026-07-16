@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Applications</title>
+</head>
+
+<body>
+
+<h2>Student Applications</h2>
+
+<table border="1">
+
+<tr>
+<th>Student Name</th>
+<th>Company</th>
+<th>Job Title</th>
+<th>Status</th>
+</tr>
+
+<tbody id="applicationList">
+
+</tbody>
+
+</table>
+
+
+<script>
+
+fetch("/applications")
+.then(response => response.json())
+.then(data => {
+
+let table = document.getElementById("applicationList");
+
+data.forEach(app => {
+
+table.innerHTML += `
+
+<tr>
+
+<td>${app.applicantName}</td>
+<td>${app.company}</td>
+<td>${app.jobTitle}</td>
+<td>${app.status}</td>
+
+</tr>
+
+`;
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
