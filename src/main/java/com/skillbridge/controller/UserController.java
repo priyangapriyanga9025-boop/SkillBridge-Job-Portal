@@ -2,6 +2,7 @@ package com.skillbridge.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import com.skillbridge.service.UserService;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;
@@ -32,17 +34,15 @@ public class UserController {
     }
 
 
+    
     @PostMapping("/login")
-    public User login(@RequestBody User user) {
+public User login(@RequestBody User user) {
 
-        User existing = userService.loginUser(
-                user.getEmail(),
-                user.getPassword()
-        );
-
-        return existing;
-
-    }
+    return userService.loginUser(
+            user.getEmail(),
+            user.getPassword()
+    );
+}
 
 
     @GetMapping("/all")

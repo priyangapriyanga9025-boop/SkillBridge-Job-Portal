@@ -220,7 +220,6 @@ const user={
 email:email,
 password:password
 };
-
 fetch("https://skillbridge-job-portal-production.up.railway.app/users/login",{
     method:"POST",
     headers:{
@@ -228,40 +227,32 @@ fetch("https://skillbridge-job-portal-production.up.railway.app/users/login",{
     },
     body:JSON.stringify(user)
 })
-.then(response => {
+.then(response => response.json())
+.then(data => {
 
-    if(!response.ok){
-        throw new Error("Login failed");
+    console.log(data);
+
+    if(data){
+
+        localStorage.setItem("studentName", data.name);
+
+        alert("Login Success");
+
+        window.location.href="dashboard.html";
+
     }
+    else{
 
-    return response.json();
-})
-.then(user => {
-
-    if(user != null){
-
-        localStorage.setItem("studentName", user.name);
-
-        alert("Welcome Admin!");
-
-        window.location.href = "dashboard.html";
-
-    }else{
-
-        document.getElementById("result").style.color = "red";
-        document.getElementById("result").innerHTML = "Invalid Email or Password";
+        document.getElementById("result").innerHTML =
+        "Invalid Email or Password";
 
     }
 
 })
-.catch(error => {
-
-    console.log(error);
-
-    document.getElementById("result").style.color = "red";
-    document.getElementById("result").innerHTML = "Unable to connect to server.";
-
+.catch(error=>{
+    console.log("ERROR:",error);
 });
+
 }
 </script>
 
