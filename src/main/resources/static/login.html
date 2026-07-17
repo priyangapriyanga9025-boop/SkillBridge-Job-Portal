@@ -222,21 +222,25 @@ password:password
 };
 
 fetch("/users/login",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify(user)
-
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify(user)
 })
+.then(response => {
 
-.then(response => response.text())
-.then(data => {
+    if(!response.ok){
+        throw new Error("Login failed");
+    }
 
-    if(data === "Login Successful"){
+    return response.json();
+})
+.then(user => {
+
+    if(user != null){
+
+        localStorage.setItem("studentName", user.name);
 
         alert("Welcome Admin!");
 
@@ -245,21 +249,20 @@ body:JSON.stringify(user)
     }else{
 
         document.getElementById("result").style.color = "red";
-        document.getElementById("result").innerHTML = data;
+        document.getElementById("result").innerHTML = "Invalid Email or Password";
 
     }
 
 })
+.catch(error => {
 
-.catch(()=>{
+    console.log(error);
 
-document.getElementById("result").style.color="red";
-document.getElementById("result").innerHTML="Unable to connect to server.";
+    document.getElementById("result").style.color = "red";
+    document.getElementById("result").innerHTML = "Unable to connect to server.";
 
 });
-
 }
-
 </script>
 
 </body>
