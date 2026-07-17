@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,30 +36,38 @@ public class ApplicationController {
         return applicationRepository.findAll();
 
     }
+
+
+    @PostMapping("/apply")
+    public Application applyJob(@RequestBody Application application){
+
+        application.setStatus("Pending");
+
+        return applicationRepository.save(application);
+
+    }
+
+
     @PutMapping("/update/{id}")
-public Application updateStatus(
-        @PathVariable Long id,
-        @RequestBody Application application){
+    public Application updateStatus(
+            @PathVariable Long id,
+            @RequestBody Application application){
 
-    Application existing = applicationRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Application not found"));
+        Application existing = applicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
 
-    existing.setStatus(application.getStatus());
+        existing.setStatus(application.getStatus());
 
-    return applicationRepository.save(existing);
-}
-@GetMapping("/apply")
-public List<Application> getAppliedApplications(){
+        return applicationRepository.save(existing);
+    }
 
-    return applicationRepository.findAll();
 
-}
-@GetMapping("/student/{email}")
-public List<Application> getStudentApplications(
-        @PathVariable String email){
+    @GetMapping("/student/{name}")
+    public List<Application> getStudentApplications(
+            @PathVariable String name){
 
-    return applicationRepository.findByApplicantName(email);
+        return applicationRepository.findByApplicantName(name);
 
-}
+    }
 
 }

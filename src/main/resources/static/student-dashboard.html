@@ -357,13 +357,13 @@ rows+=`
 
 <td>${count++}</td>
 
-<td>${job.title}</td>
+<td>${job.title || ""}</td>
 
-<td>${job.company}</td>
+<td>${job.company || ""}</td>
 
-<td>${job.location}</td>
+<td>${job.location || ""}</td>
 
-<td>${job.skills}</td>
+<td>${job.skills || ""}</td>
 
 <td>
 
@@ -376,8 +376,8 @@ Save
 
 <button class="applyBtn"
 onclick="applyJob(${job.id},
-'${job.title}',
-'${job.company}')">
+'${job.title || ""}',
+'${job.company || ""}')"
 
 Apply
 

@@ -34,4 +34,5 @@ public List<User> getAllUsers() {
 public long getUserCount() {
     return userRepository.count();
 }
+
   }

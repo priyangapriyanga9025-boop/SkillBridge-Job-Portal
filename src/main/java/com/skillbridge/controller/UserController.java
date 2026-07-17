@@ -1,4 +1,5 @@
 package com.skillbridge.controller;
+
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,37 +14,50 @@ import com.skillbridge.service.UserService;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-       private final UserService userService;
+
+    private final UserService userService;
 
     public UserController(UserService userService) {
+
         this.userService = userService;
+
     }
+
 
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
+
         return userService.saveUser(user);
-         }
+
+    }
+
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody User user) {
+    public User login(@RequestBody User user) {
 
-        User existingUser = userService.loginUser(user.getEmail(), user.getPassword());
+        User existing = userService.loginUser(
+                user.getEmail(),
+                user.getPassword()
+        );
 
-        if (existingUser != null) {
-            return "Login Successful";
-        } else {
-            return "Invalid Email or Password";
-        }
+        return existing;
+
     }
+
+
     @GetMapping("/all")
-public List<User> getAllUsers() {
-    return userService.getAllUsers();
-}
-@GetMapping("/count")
-public long getUserCount() {
-    return userService.getUserCount();
-}
-}
-    
+    public List<User> getAllUsers() {
+
+        return userService.getAllUsers();
+
+    }
 
 
+    @GetMapping("/count")
+    public long getUserCount() {
+
+        return userService.getUserCount();
+
+    }
+
+}

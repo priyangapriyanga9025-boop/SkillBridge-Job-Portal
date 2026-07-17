@@ -234,10 +234,11 @@ body:JSON.stringify(user)
 })
 
 .then(response=>response.text())
-
 .then(data=>{
 
-if(data==="Login Successful"){
+let user = JSON.parse(data);
+
+if(user.email){
 
 alert("Welcome Admin!");
 

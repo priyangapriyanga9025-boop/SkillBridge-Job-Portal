@@ -130,26 +130,23 @@ password:password
 
 })
 
-.then(response=>response.text())
+.then(response => response.json())
+.then(user => {
 
-.then(data=>{
+    console.log("USER =", user);
 
-if(data==="Login Successful"){
+    if(user == null){
+        alert("Invalid Login");
+        return;
+    }
 
-localStorage.setItem("studentEmail",email);
+    localStorage.setItem("studentName", user.name);
 
-alert("Login Successful");
+    alert(localStorage.getItem("studentName"));
 
-window.location.href="student-dashboard.html";
-
-}else{
-
-alert(data);
-
-}
+    window.location.href = "student-dashboard.html";
 
 })
-
 .catch(error=>{
 
 console.log(error);
